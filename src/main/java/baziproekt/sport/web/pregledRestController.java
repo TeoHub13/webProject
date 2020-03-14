@@ -31,10 +31,10 @@ public class pregledRestController {
         private Double averageRating;
     }
 
-     @GetMapping("/users/{id}/pregled")
-    public List<PregledDTO> getAllRatingbyId(@PathVariable Integer id) {
+     @GetMapping("/users/pregled")
+    public List<PregledDTO> getAllRatingbyId(@RequestHeader (name="Authorization") String token) {
 
-         List<Pregled> allRatingById = pregledServ.getAllRatingById(id);
+         List<Pregled> allRatingById = pregledServ.getAllRatingById(token);
          Map<Integer, OptionalDouble> prodIdToRejting = allRatingById.stream().map(Pregled::getProdukt)
                  .collect(Collectors.toMap(Produkt::getProduktId, produkt -> pregledServ.getAverageOfProdId(produkt.getProduktId())));
          List<PregledDTO> pregledDTOs = allRatingById.stream().map(pregled -> new PregledDTO(pregled, prodIdToRejting.get(pregled.getProdukt().getProduktId()).orElseGet(() -> 0))).collect(Collectors.toList());
@@ -53,10 +53,10 @@ public class pregledRestController {
      }
 
 
-     @DeleteMapping("users/{id}/{prId}")
-    public  void deleteRecord(@PathVariable Integer id,@PathVariable Integer prId)
+     @DeleteMapping("users/del/{prId}")
+    public  void deleteRecord(@RequestHeader (name = "Authorization") String token,@PathVariable Integer prId)
      {
-         pregledServ.deletePregled(id,prId);
+         pregledServ.deletePregled(token,prId);
      }
      @PatchMapping("users/{id}/{produktId}/pregled")
     public Pregled updateRating(@PathVariable Integer id,@PathVariable Integer prId,@RequestParam Integer rejting)
@@ -64,10 +64,10 @@ public class pregledRestController {
          return pregledServ.UpdateRating(id,prId,rejting);
      }
 
-     @PostMapping("users/{id}/{prId}")
-     public Pregled addRating(@PathVariable Integer id,@PathVariable Integer prId,@RequestBody RejtingBodyClass rejting)
+     @PostMapping("users/{prId}")
+     public Pregled addRating(@RequestHeader (name = "Authorization") String token,@PathVariable Integer prId,@RequestBody RejtingBodyClass rejting)
      {
-         return pregledServ.addRating(id,prId,rejting.getRejting());
+         return pregledServ.addRating(token,prId,rejting.getRejting());
      }
 
 //    @PostMapping("/pregledi")

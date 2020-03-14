@@ -1,5 +1,6 @@
 package baziproekt.sport.service;
 
+import baziproekt.sport.model.JwtRequest;
 import baziproekt.sport.model.Korisnik;
 import baziproekt.sport.model.NajaktivenKorisnikView;
 import org.springframework.stereotype.Service;
@@ -19,4 +20,6 @@ public interface KorisnikService {
     Korisnik getUser(String kName, String pass);
 
     List<NajaktivenKorisnikView> getNajaktiven();
+//
+//    Korisnik getKorinsikByUsername(JwtRequest authenticationRequest);
 }

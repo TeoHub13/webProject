@@ -4,10 +4,9 @@ import baziproekt.sport.model.*;
 import baziproekt.sport.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
 @RestController
 @RequestMapping("/")
 public class ProductRestController {
@@ -17,6 +16,12 @@ public class ProductRestController {
     public ProductRestController(ProductService productService) {
         this.productService = productService;
     }
+
+    @GetMapping("/patiki")
+    public List<Patiki> getAllPatiki() {
+        return productService.getAllPatiki();
+    }
+
 
     @GetMapping("/products")
     public List<Produkt> getAllProducts() {
@@ -69,9 +74,9 @@ public class ProductRestController {
     }
 
 
-    @GetMapping("/products/users/{id}/wishlist")
-    public List<Produkt> getProductsInWhishlist(@PathVariable("id") Integer userId) {
-        return productService.getAllProductsInWishlistForUser(userId);
+    @GetMapping("/products/users/wishlist")
+    public List<Produkt> getProductsInWhishlist(@RequestHeader (name="Authorization") String token) {
+        return productService.getAllProductsInWishlistForUser(token);
     }
 
 

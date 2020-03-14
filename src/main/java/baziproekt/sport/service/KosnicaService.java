@@ -10,19 +10,19 @@ public interface KosnicaService {
 
     List<Kosnica> getAllCartsOfId(Integer id);
 
-    List<KosnicaProduktMagacin> oneCart(Integer userId, Integer kId);
+    List<KosnicaProduktMagacin> oneCart(String token);
 
     Kosnica deleteCart(Integer userId, Integer kId);
 
-    void addProductToKosnica(Integer userId, Integer productId, Integer kolicina);
+    void addProductToKosnica(String token, Integer productId, Integer kolicina);
 
     List<Produkt> getAllProductInKosica(Integer userId);
 
     void deleteProductFromCart(deleteProductBody key);
 
-    void addProductToWishList(Integer userId, Integer productId, boolean popust);
+    void addProductToWishList(String token, Integer productId, boolean popust);
 
-    void deleteProductFromWishlist(WishlistCompositeKey key);
+    void deleteProductFromWishlist(String token,deleteWishBody body);
 //
 //    List<Produkt> getAllProductsFromWishlist(Integer userId);
 }

@@ -1,8 +1,11 @@
 package baziproekt.sport.web;
 
 import baziproekt.sport.model.*;
+import baziproekt.sport.service.KorisnikService;
 import baziproekt.sport.service.KosnicaService;
 import baziproekt.sport.service.ProductService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,26 +13,25 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/")
 public class KosnicaRestController {
     private final KosnicaService kosnicaService;
     private  final ProductService productService;
+    private final KorisnikService korisnikService;
     //private final KosnicaProduktMagacinService kosnicaProduktMagacinService;
-    public KosnicaRestController(KosnicaService kosnicaService, ProductService productService)
-    {
-        this.kosnicaService=kosnicaService;
-        this.productService = productService;
-    }
+
 
     //POVIK sto se povikuva na add to card na Front end
-    @PostMapping(value = "/users/{usrId}/kosnica/product/{prid}")
-    public void addProductToKosnica (@PathVariable("usrId") Integer userId, @PathVariable("prid") Integer productId,@RequestBody kolicinaInput kol) {
-        kosnicaService.addProductToKosnica(userId, productId, kol.getKolicina());
+    @PostMapping(value = "/users/kosnica/product/{prid}")
+    public void addProductToKosnica (@RequestHeader (name="Authorization") String token, @PathVariable("prid") Integer productId,@RequestBody kolicinaInput kol) {
+
+        kosnicaService.addProductToKosnica(token, productId, kol.getKolicina());
     }
-    @PostMapping(value = "/users/{userId}/wishlist/product/{prid}")
-    public void addProductToWishList(@PathVariable("userId") Integer userId,@PathVariable("prid") Integer productId,@RequestBody PopustCl popustCl)
+    @PostMapping(value = "/users/wishlist/product/{prid}")
+    public void addProductToWishList(@RequestHeader (name = "Authorization") String token,@PathVariable("prid") Integer productId,@RequestBody PopustCl popustCl)
     {
-        kosnicaService.addProductToWishList(userId, productId,popustCl.isPopust());
+        kosnicaService.addProductToWishList(token, productId,popustCl.isPopust());
     }
 //    @GetMapping(value = "/wishlist/{userId}")
 //    public List<Produkt> getProductsFromWishlist(@PathVariable("userId") Integer userId)
@@ -62,10 +64,10 @@ public class KosnicaRestController {
 
 
     //todo: kID nema da ti treba , ke ja zemes preku listata (poslednata od listata mu e tekovnata kosica)
-    @GetMapping("/kosnica/{userId}")
-    public  List<KosnicaProduktMagacin> getCart(@PathVariable Integer userId)
+    @GetMapping("/kosnica")
+    public  List<KosnicaProduktMagacin> getCart(@RequestHeader (name="Authorization") String token)
     {
-        return  kosnicaService.oneCart(userId,0);
+        return  kosnicaService.oneCart(token);
    }
 //    @GetMapping("/cart")
 //    public Produkt proba(@RequestParam Integer kId)
@@ -79,15 +81,15 @@ public class KosnicaRestController {
         return kosnicaService.deleteCart(userId,kId);
     }
 
-    @DeleteMapping("/kosnica/{userId}")
-    public void deleteProductFromCart(@PathVariable Integer userId, @RequestBody deleteProductBody key)
+    @DeleteMapping("/kosnica")
+    public void deleteProductFromCart(@RequestBody deleteProductBody key)
     {
          kosnicaService.deleteProductFromCart(key);
     }
-    @DeleteMapping("/wishlist/{userId}")
-        public void deleteProductFromWishlist(@PathVariable Integer userId, @RequestBody WishlistCompositeKey key)
+    @DeleteMapping("/wishlist")
+        public void deleteProductFromWishlist(@RequestHeader (name="Authorization") String token,@RequestBody deleteWishBody body)
         {
-            kosnicaService.deleteProductFromWishlist(key);
+            kosnicaService.deleteProductFromWishlist(token,body);
         }
 
 

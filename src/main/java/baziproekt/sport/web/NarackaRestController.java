@@ -20,20 +20,21 @@ public class NarackaRestController {
         this.narackaService = narackaService;
     }
 
-    @GetMapping("/naracki/{userId}")
-    public List<Naracka> getAllNarackiFromUser(@PathVariable("userId") Integer userId)
+    @GetMapping("/naracki")
+    public List<Naracka> getAllNarackiFromUser(@RequestHeader (name="Authorization") String token)
     {
-        return narackaService.getAllNaracki(userId);
+        return narackaService.getAllNaracki(token);
     }
     @GetMapping("naracki/potrosuvacka")
     public  List<PotrosuvackaPoMesecView> getPotrosuvacka()
     {
         return narackaService.getPotrosuvacka();
     }
-    @PostMapping("/naracki/{userId}/{cartId}")
-    public Naracka checkoutCart(@PathVariable("userId") Integer userId, @PathVariable("cartId") Integer cartId, @RequestBody NarackaBody body)
+    @PostMapping("/naracki/{cartId}")
+    public Naracka checkoutCart(@RequestHeader(name = "Authorization") String token, @PathVariable("cartId") Integer cartId, @RequestBody NarackaBody body)
+
     {
-        return narackaService.putNewOrder(userId,cartId,body);
+        return narackaService.putNewOrder(token,cartId,body);
     }
 
 }

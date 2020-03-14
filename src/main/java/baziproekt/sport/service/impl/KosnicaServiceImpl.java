@@ -1,11 +1,13 @@
 package baziproekt.sport.service.impl;
 
+import baziproekt.sport.config.JwtTokenUtil;
 import baziproekt.sport.model.*;
 import baziproekt.sport.repository.*;
 
 import baziproekt.sport.service.KosnicaService;
 import baziproekt.sport.service.MagacinService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -23,6 +25,10 @@ public class KosnicaServiceImpl implements KosnicaService {
     private final MagacinProduktReposiotry magacinProduktRepository;
     private final  WishlistRepository wishlistRepository;
     private final MagacinRepository magacinRepository;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
     @Override
     public Kosnica addNew(Integer kId, Integer koId) {
         Korisnik korisnik = korisnikRepository.findById(kId).orElseThrow(() -> new RuntimeException("nema takov korisnik"));
@@ -42,17 +48,18 @@ public class KosnicaServiceImpl implements KosnicaService {
     }
 
     @Override
-    public List<KosnicaProduktMagacin> oneCart(Integer userId, Integer kId) {
-        Optional<Korisnik> userOpt = korisnikRepository.findById(userId);
-
-        List<Kosnica> kosniciNaKorisnik = kosnicaRepository.findAllByKorisnik_KorisnikId(userId);
-        Korisnik user = userOpt.orElseThrow(() -> new RuntimeException("Nema korisnik so id = " + userId));
+    public List<KosnicaProduktMagacin> oneCart(String token) {
+        String parts[]=token.split(" ");
+        String username=jwtTokenUtil.getUsernameFromToken(parts[1]);
+        Korisnik userOpt = korisnikRepository.findByKorisnickoIme(username);
+        List<Kosnica> kosniciNaKorisnik = kosnicaRepository.findAllByKorisnik_KorisnikId(userOpt.getKorisnikId());
+        //Korisnik user = userOpt.orElseThrow(() -> new RuntimeException("Nema korisnik so id = " + userId));
 
         Kosnica kosnica;
         if (kosniciNaKorisnik.isEmpty()) {
             //NEMA niedna kosnica. Kreirame nova kosnica
             kosnica = new Kosnica();
-            kosnica.setKorisnik(user);
+            kosnica.setKorisnik(userOpt);
             kosnica = kosnicaRepository.save(kosnica);
         } else {
             //TODO zemi ja kosnicata sto ne e procesirana
@@ -66,8 +73,11 @@ public class KosnicaServiceImpl implements KosnicaService {
     }
 
     @Override
-    public void addProductToKosnica(Integer userId, Integer productId, Integer kolicina) {
-        Optional<Korisnik> userOpt = korisnikRepository.findById(userId);
+    public void addProductToKosnica(String token, Integer productId, Integer kolicina) {
+        String parts[]=token.split(" ");
+        String username=jwtTokenUtil.getUsernameFromToken(parts[1]);
+        Korisnik korisnik = korisnikRepository.findByKorisnickoIme(username);
+        Optional<Korisnik> userOpt = korisnikRepository.findById(korisnik.getKorisnikId());
         Produkt product = productRepository.findByProduktId(productId);
         if(magacinProduktRepository.findByProdukt_ProduktId(productId)==null)
         {
@@ -83,8 +93,8 @@ public class KosnicaServiceImpl implements KosnicaService {
         Magacin magacin = produktMagacin.getMagacin();
         System.out.println(magacin);
         int brojac = 0;
-        Korisnik user = userOpt.orElseThrow(() -> new RuntimeException("Nema korisnik so id = " + userId));
-        List<Kosnica> kosniciNaKorisnik = kosnicaRepository.findAllByKorisnik_KorisnikId(userId);
+        Korisnik user = userOpt.orElseThrow(() -> new RuntimeException("Nema korisnik so id = " + korisnik.getKorisnikId()));
+        List<Kosnica> kosniciNaKorisnik = kosnicaRepository.findAllByKorisnik_KorisnikId(korisnik.getKorisnikId());
         Kosnica kosnica;
         if (kosniciNaKorisnik.isEmpty()) {
             //NEMA niedna kosnica. Kreirame nova kosnica
@@ -149,9 +159,11 @@ public class KosnicaServiceImpl implements KosnicaService {
     }
 
     @Override
-    public void addProductToWishList(Integer userId, Integer productId,boolean popust) {
-
-        Korisnik kor = korisnikRepository.findById(userId).orElseThrow(()->new RuntimeException("nema takov"));
+    public void addProductToWishList(String token, Integer productId,boolean popust) {
+        String parts[]=token.split(" ");
+        String username=jwtTokenUtil.getUsernameFromToken(parts[1]);
+        Korisnik korisnik = korisnikRepository.findByKorisnickoIme(username);
+        Korisnik kor = korisnikRepository.findById(korisnik.getKorisnikId()).orElseThrow(()->new RuntimeException("nema takov"));
         Produkt prod = productRepository.findByProduktId(productId);
         Wishlist wishlist=new Wishlist();
         wishlist.setKorisnik(kor);
@@ -163,8 +175,11 @@ public class KosnicaServiceImpl implements KosnicaService {
 
     @Override
     @Transactional
-    public void deleteProductFromWishlist(WishlistCompositeKey key) {
-        wishlistRepository.deleteByKorisnik_KorisnikIdAndProdukt_ProduktId(key.getKorisnik(),key.getProdukt());
+    public void deleteProductFromWishlist(String token,deleteWishBody body) {
+        String parts[]=token.split(" ");
+        String username=jwtTokenUtil.getUsernameFromToken(parts[1]);
+        Korisnik korisnik=korisnikRepository.findByKorisnickoIme(username);
+        wishlistRepository.deleteByKorisnik_KorisnikIdAndProdukt_ProduktId(korisnik.getKorisnikId(),body.getProdukt());
     }
 
 }

@@ -1,5 +1,6 @@
 package baziproekt.sport.service.impl;
 
+import baziproekt.sport.config.JwtTokenUtil;
 import baziproekt.sport.model.Korisnik;
 import baziproekt.sport.model.Pregled;
 import baziproekt.sport.model.Produkt;
@@ -9,6 +10,7 @@ import baziproekt.sport.repository.ProductRepository;
 import baziproekt.sport.repository.pregledRepository;
 import baziproekt.sport.service.pregledService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -23,9 +25,14 @@ public class pregledServiceImpl implements pregledService {
     private final pregledRepository pregledRepo;
     private final KorisnikRepository korisnikRepository;
     private final ProductRepository productRepository;
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
     @Override
-    public List<Pregled> getAllRatingById(Integer id) {
-        return pregledRepo.findAllByKorisnik_KorisnikId(id);
+    public List<Pregled> getAllRatingById(String token) {
+        String parts[]=token.split(" ");
+        String username=jwtTokenUtil.getUsernameFromToken(parts[1]);
+        Korisnik korisnik=korisnikRepository.findByKorisnickoIme(username);
+        return pregledRepo.findAllByKorisnik_KorisnikId(korisnik.getKorisnikId());
     }
 
     @Override
@@ -43,8 +50,11 @@ public class pregledServiceImpl implements pregledService {
     }
 
     @Override
-    public Pregled addRating(Integer id, Integer prId, Integer rejting) {
-        Korisnik korisnik=korisnikRepository.findByKorisnikId(id);
+    public Pregled addRating(String token, Integer prId, Integer rejting) {
+        String parts[]=token.split(" ");
+        String username=jwtTokenUtil.getUsernameFromToken(parts[1]);
+        Korisnik korisnik=korisnikRepository.findByKorisnickoIme(username);
+       // Korisnik korisnik=korisnikRepository.findByKorisnikId(id);
         Produkt produkt=productRepository.findById(prId).orElseThrow(()-> new RuntimeException("nema"));
         Pregled pregled=new Pregled();
         pregled.setKorisnik(korisnik);
@@ -55,9 +65,12 @@ public class pregledServiceImpl implements pregledService {
 
     @Override
     @Transactional
-    public void deletePregled(Integer id,Integer prId) {
+    public void deletePregled(String token,Integer prId) {
        // Pregled pregled=pregledRepo.findByKorisnik_KorisnikIdAndProdukt_ProduktId(id,prId);
-        pregledRepo.deleteByKorisnik_KorisnikIdAndProdukt_ProduktId(id,prId);
+        String parts[]=token.split(" ");
+        String username=jwtTokenUtil.getUsernameFromToken(parts[1]);
+        Korisnik korisnik=korisnikRepository.findByKorisnickoIme(username);
+        pregledRepo.deleteByKorisnik_KorisnikIdAndProdukt_ProduktId(korisnik.getKorisnikId(),prId);
     }
 
     @Override

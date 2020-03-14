@@ -8,9 +8,9 @@ import baziproekt.sport.model.PotrosuvackaPoMesecView;
 import java.util.List;
 
 public interface NarackaService {
-    List<Naracka> getAllNaracki(Integer userId);
+    List<Naracka> getAllNaracki(String token);
 
-    Naracka putNewOrder(Integer userId, Integer cartId, NarackaBody body);
+    Naracka putNewOrder(String token, Integer cartId, NarackaBody body);
 
     List<PotrosuvackaPoMesecView> getPotrosuvacka();
 }

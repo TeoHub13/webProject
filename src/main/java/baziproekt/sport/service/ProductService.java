@@ -1,7 +1,6 @@
 package baziproekt.sport.service;
 
 import baziproekt.sport.model.*;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -17,7 +16,7 @@ public interface ProductService {
     Produkt deleteProduct(Integer id);
 
 
-    List<Produkt> getAllProductsInWishlistForUser(Integer userId);
+    List<Produkt> getAllProductsInWishlistForUser(String token);
 
     List<NajprodavanProduktView> getNajprodavan();
 
@@ -28,4 +27,6 @@ public interface ProductService {
     List<PotrosuvackaPoMesecOblekaView> getObleka();
 
     List<PotrosuvackaPoMesecAksesoariView> getAksesoari();
+
+    List<Patiki> getAllPatiki();
 }

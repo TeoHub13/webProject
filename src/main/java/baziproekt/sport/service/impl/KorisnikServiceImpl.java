@@ -1,5 +1,6 @@
 package baziproekt.sport.service.impl;
 
+import baziproekt.sport.model.JwtRequest;
 import baziproekt.sport.model.Korisnik;
 import baziproekt.sport.model.NajaktivenKorisnikView;
 import baziproekt.sport.repository.KorisnikRepository;
@@ -65,6 +66,11 @@ public class KorisnikServiceImpl implements KorisnikService {
     public List<NajaktivenKorisnikView> getNajaktiven() {
         return najaktivenKorisnikViewRepository.findAll();
     }
+//
+//    @Override
+//    public Korisnik getKorinsikByUsername(JwtRequest authenticationRequest) {
+//        return korisnikRepository.findByKorisnickoIme(authenticationRequest.getUsername());
+//    }
 
 
 }
