@@ -22,6 +22,16 @@ public class ProductRestController {
         return productService.getAllPatiki();
     }
 
+    @GetMapping("/obleka")
+    public List<Obleka> getAllObleka() {
+        return productService.getAllObleka();
+    }
+
+    @GetMapping("/accessories")
+    public List<Accessories> getAllAccessories() {
+        return productService.getAllAccessories();
+    }
+
 
     @GetMapping("/products")
     public List<Produkt> getAllProducts() {

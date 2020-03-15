@@ -11,19 +11,13 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Obleka {
+public class Obleka extends Produkt{
 
-        @Id
-        private Integer produktId;
-
-        @OneToOne
-        @MapsId
-        private Produkt produkt;
 
         @Column(name = "materijal_obleka")
         private  String materijal;
         @Column(name = "velicina_obleka")
-        private    Integer velicina;
+        private  char velicina;
 
 
 }

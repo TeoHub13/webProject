@@ -29,4 +29,8 @@ public interface ProductService {
     List<PotrosuvackaPoMesecAksesoariView> getAksesoari();
 
     List<Patiki> getAllPatiki();
+
+    List<Obleka> getAllObleka();
+
+    List<Accessories> getAllAccessories();
 }

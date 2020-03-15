@@ -26,6 +26,8 @@ public class ProductServiceImpl implements ProductService {
     private final PotrosuvackaPoMesecOblekaViewRepository potrosuvackaPoMesecOblekaViewRepository;
     private final PotrosuvackaPoMesecAksesoariViewRepository potrosuvackaPoMesecAksesoariViewRepository;
     private final MagacinRepository magacinRepository;
+    private  final OblekaRepository oblekaRepository;
+    private final AccessoriesRepository accessoriesRepository;
     private final MagacinProduktReposiotry magacinProduktReposiotry;
     @Override
     public List<Produkt> getAllProductsFromBase() {
@@ -104,6 +106,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Patiki> getAllPatiki() {
         return patikiRepository.findAll();
+    }
+
+    @Override
+    public List<Obleka> getAllObleka() {
+        return oblekaRepository.findAll();
+    }
+
+    @Override
+    public List<Accessories> getAllAccessories() {
+        return accessoriesRepository.findAll();
     }
 
 }

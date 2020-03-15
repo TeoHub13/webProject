@@ -13,6 +13,7 @@ import java.util.List;
 //@AllArgsConstructor
 @Data
 @Entity(name = "produkt")
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "produkt")
 public class Produkt {
 
