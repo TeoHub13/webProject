@@ -2,6 +2,7 @@ package baziproekt.sport.web;
 
 import baziproekt.sport.model.*;
 import baziproekt.sport.service.ProductService;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -68,8 +69,24 @@ public class ProductRestController {
     }
 
     @PostMapping("/products")
-    public Produkt createAndSave(@RequestBody productBody body ) {
+    @Secured(value = "ROLE_ADMIN")
+    public Produkt createAndSave(@RequestBody ProductBody body ) {
         return this.productService.addProduct(body);
+    }
+
+    public Produkt updateProdukt(@RequestBody ProductBody body) {
+        return this.productService.updateProduct(body);
+    }
+
+    @PostMapping("/addclothes")
+    @Secured(value = "ROLE_ADMIN")
+    public Produkt createAndSave(@RequestBody ClothesBody body ) {
+        return this.productService.addClothes(body);
+    }
+    @PostMapping("/addaccessories")
+    @Secured(value = "ROLE_ADMIN")
+    public Produkt createAcc(@RequestBody ClothesBody body ) {
+        return this.productService.addAccessories(body);
     }
 
 

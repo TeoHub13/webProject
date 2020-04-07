@@ -1,12 +1,14 @@
 package baziproekt.sport.config;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -52,6 +54,9 @@ public class JwtTokenUtil implements Serializable {
     //generate token for user
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+        GrantedAuthority authority = authorities.stream().findFirst().orElseThrow(() -> new RuntimeException("Not logged in"));
+        claims.put("role", authority.getAuthority());
         return doGenerateToken(claims, userDetails.getUsername());
     }
 

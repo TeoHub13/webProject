@@ -4,16 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class productBody {
+public class ProductBody {
 
 
 
@@ -32,4 +28,6 @@ public class productBody {
     String slika;
 
     Integer kolicina;
+
+    Integer velicina;
 }

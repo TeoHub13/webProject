@@ -3,6 +3,7 @@ package baziproekt.sport.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Immutable;
 
 import javax.persistence.*;
 
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Immutable
 public class PotrosuvackaPoMesecPatikiView {
 
     @Id

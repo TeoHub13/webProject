@@ -8,7 +8,7 @@ public interface ProductService {
 
     List<Produkt> getAllProductsFromBase();
 
-    Produkt addProduct(productBody body);
+    Produkt addProduct(ProductBody body);
 
 
     Produkt getProductWithId(Integer id);
@@ -33,4 +33,10 @@ public interface ProductService {
     List<Obleka> getAllObleka();
 
     List<Accessories> getAllAccessories();
+
+    Produkt addClothes(ClothesBody body);
+
+    Produkt addAccessories(ClothesBody body);
+
+    Produkt updateProduct(ProductBody body);
 }
