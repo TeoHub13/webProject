@@ -26,4 +26,8 @@ public class KosnicaProduktMagacin {
     private Magacin magacin;
 
     private Integer kolicina;
+
+    @Column(name = "korisnik_id")
+    private Integer korisnikId;
+
 }

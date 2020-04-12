@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @NoArgsConstructor
-//@AllArgsConstructor
+@AllArgsConstructor
 @Data
 @Entity(name = "produkt")
 @Inheritance(strategy = InheritanceType.JOINED)

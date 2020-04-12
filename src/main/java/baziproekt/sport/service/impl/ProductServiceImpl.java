@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,16 +40,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Produkt addProduct(ProductBody body) {
         Proizvoditel proizvoditel=proizvoditelRepository.findById(body.getProizvoditelId()).orElseThrow(()->new RuntimeException("nema takov"));
-        Produkt produkt=new Produkt();
-        produkt.setBrend(body.getBrend());
-        produkt.setCena(body.getCena());
-        produkt.setPol(body.getPol());
-        produkt.setPopust(body.getPopust());
-        produkt.setModel(body.getModel());
-        produkt.setProizvoditel(proizvoditel);
-        produkt.setSlika(body.getSlika());
-        ProduktMagacin pm=new ProduktMagacin();
-
+        Magacin magacin=magacinRepository.findById(body.getMagacinId()).orElseThrow(()-> new RuntimeException("nema magacin"));
         Patiki patiki=new Patiki();
         patiki.setBrend(body.getBrend());
         patiki.setCena(body.getCena());
@@ -58,7 +50,22 @@ public class ProductServiceImpl implements ProductService {
         patiki.setProizvoditel(proizvoditel);
         patiki.setSlika(body.getSlika());
         patiki.setVelicina(body.getVelicina());
-        return patikiRepository.save(patiki);
+        patikiRepository.save(patiki);
+//        Produkt produkt=new Produkt();
+//        produkt.setBrend(body.getBrend());
+//        produkt.setCena(body.getCena());
+//        produkt.setPol(body.getPol());
+//        produkt.setPopust(body.getPopust());
+//        produkt.setModel(body.getModel());
+//        produkt.setProizvoditel(proizvoditel);
+//        produkt.setSlika(body.getSlika());
+        Produkt produkt=productRepository.findByModel(patiki.getModel());
+        ProduktMagacin pm=new ProduktMagacin();
+        pm.setProdukt(produkt);
+        pm.setKolicina(body.getKolicina());
+        pm.setMagacin(magacin);
+        magacinProduktReposiotry.save(pm);
+        return patiki;
         //pm.setMagacin(magacinRepository.findAll().get(0));
        //  return productRepository.save(produkt);
     }
@@ -131,6 +138,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Produkt addClothes(ClothesBody body) {
         Proizvoditel proizvoditel=proizvoditelRepository.findById(body.getProizvoditelId()).orElseThrow(()->new RuntimeException("nema takov"));
+        Magacin magacin=magacinRepository.findById(body.getMagacinId()).orElseThrow(()->new RuntimeException("nema takov magacin") );
         Obleka obleka=new Obleka();
         obleka.setBrend(body.getBrend());
         obleka.setCena(body.getCena());
@@ -141,13 +149,23 @@ public class ProductServiceImpl implements ProductService {
         obleka.setSlika(body.getSlika());
         obleka.setVelicina(body.getVelicina());
         obleka.setMaterijal(body.getMaterijal());
-        return oblekaRepository.save(obleka);
+        oblekaRepository.save(obleka);
+        Produkt produkt=productRepository.findByModel(obleka.getModel());
+        ProduktMagacin pm=new ProduktMagacin();
+        pm.setProdukt(produkt);
+        pm.setKolicina(body.getKolicina());
+        pm.setMagacin(magacin);
+        magacinProduktReposiotry.save(pm);
+        return obleka;
+
+        //return oblekaRepository.save(obleka);
 
     }
 
     @Override
     public Produkt addAccessories(ClothesBody body) {
         Proizvoditel proizvoditel=proizvoditelRepository.findById(body.getProizvoditelId()).orElseThrow(()->new RuntimeException("nema takov"));
+        Magacin magacin=magacinRepository.findById(body.getMagacinId()).orElseThrow(()->new RuntimeException("nema takov magacin"));
         Accessories accessories=new Accessories();
         accessories.setBrend(body.getBrend());
         accessories.setCena(body.getCena());
@@ -158,19 +176,37 @@ public class ProductServiceImpl implements ProductService {
         accessories.setSlika(body.getSlika());
         accessories.setVelicina(body.getVelicina());
         accessories.setMaterijal(body.getMaterijal());
-        return accessoriesRepository.save(accessories);
+        accessoriesRepository.save(accessories);
+        Produkt produkt=productRepository.findByModel(accessories.getModel());
+        ProduktMagacin pm=new ProduktMagacin();
+        pm.setProdukt(produkt);
+        pm.setKolicina(body.getKolicina());
+        pm.setMagacin(magacin);
+        magacinProduktReposiotry.save(pm);
+        return accessories;
 
 
     }
 
     @Override
-    public Produkt updateProduct(ProductBody body) {
-        Produkt produkt =
-                Produkt.builder()
-                        .produktId(1)
-                        .brend(body.getBrend())
-                        .model(body.getModel())
-                .build();
+    public Produkt updateProduct(updateBody body) {
+        Proizvoditel proizvoditel=proizvoditelRepository.findById(body.getProizvoditelId()).orElseThrow(()-> new RuntimeException("nema takov"));
+        Produkt produkt =productRepository.findById(body.getPrId()).orElseThrow(()->new RuntimeException("nema takov"));
+//                Produkt.builder()
+//                        .produktId(body.getPrId())
+//                        .brend(body.getBrend())
+//                        .model(body.getModel())
+//                        .cena(body.getCena())
+//                        .pol(body.getPol())
+//                        .slika(body.getSlika())
+//                        . proizvoditel(proizvoditel)
+//                .build();
+        produkt.setSlika(body.getSlika());
+        produkt.setProizvoditel(proizvoditel);
+        produkt.setModel(body.getModel());
+        produkt.setBrend(body.getBrend());
+        produkt.setPopust(body.getPopust());
+        produkt.setCena(body.getCena());
         return productRepository.save(produkt);
     }
 }

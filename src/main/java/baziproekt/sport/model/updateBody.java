@@ -1,12 +1,18 @@
 package baziproekt.sport.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Data
-public class ClothesBody implements Serializable {
+@AllArgsConstructor
+@NoArgsConstructor
+public class updateBody {
+
+    Integer prId;
+
     String brend;
 
     String model;
@@ -20,14 +26,4 @@ public class ClothesBody implements Serializable {
     BigDecimal popust;
 
     String slika;
-
-    Integer kolicina;
-
-    char velicina;
-
-    String materijal;
-
-
-    Integer magacinId;
-
 }

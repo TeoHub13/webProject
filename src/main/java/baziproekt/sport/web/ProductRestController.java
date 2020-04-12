@@ -56,6 +56,11 @@ public class ProductRestController {
         return  productService.getAksesoari();
     }
 
+    @PatchMapping("/updateProduct")
+    public Produkt updateProd(@RequestBody updateBody body)
+    {
+        return  productService.updateProduct(body);
+    }
 
     @GetMapping("/products/najprodavan")
     public List<NajprodavanProduktView> getNajprodavan()
@@ -74,9 +79,9 @@ public class ProductRestController {
         return this.productService.addProduct(body);
     }
 
-    public Produkt updateProdukt(@RequestBody ProductBody body) {
-        return this.productService.updateProduct(body);
-    }
+//    public Produkt updateProdukt(@RequestBody ProductBody body) {
+//        return this.productService.updateProduct(body);
+//    }
 
     @PostMapping("/addclothes")
     @Secured(value = "ROLE_ADMIN")

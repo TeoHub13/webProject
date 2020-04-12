@@ -66,7 +66,7 @@ public class KosnicaServiceImpl implements KosnicaService {
             kosnica = kosniciNaKorisnik.get(kosniciNaKorisnik.size() - 1);
         }
 
-        return kosnicaProduktMagacinRepository.findAllByKosnica_KosnicaId(kosnica.getKosnicaId());
+        return kosnicaProduktMagacinRepository.findAllByKosnica_KosnicaIdAndKorisnikId(kosnica.getKosnicaId(),userOpt.getKorisnikId());
 
 
         // return  kosnicaRepository.findByKorisnik_KorisnikIdAndKosnicaId(userId,kId);
@@ -113,7 +113,7 @@ public class KosnicaServiceImpl implements KosnicaService {
         kosnicaProduktMagacin.setKosnica(kosnica);
         kosnicaProduktMagacin.setMagacin(magacin);
         kosnicaProduktMagacin.setProdukt(product);
-
+        kosnicaProduktMagacin.setKorisnikId(korisnik.getKorisnikId());
         ProduktMagacin prodMag=magacinProduktRepository.getByProdukt_ProduktIdAndAndMagacin_MagacinId(productId,magacin.getMagacinId());
         int kolku=prodMag.getKolicina();
         prodMag.setKolicina(kolku-kolicina);

@@ -38,5 +38,5 @@ public interface ProductService {
 
     Produkt addAccessories(ClothesBody body);
 
-    Produkt updateProduct(ProductBody body);
+    Produkt updateProduct(updateBody body);
 }

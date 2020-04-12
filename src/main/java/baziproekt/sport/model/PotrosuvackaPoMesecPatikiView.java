@@ -7,21 +7,25 @@ import org.springframework.data.annotation.Immutable;
 
 import javax.persistence.*;
 
-@Entity(name = "potrosuvacka_po_mesec_patiki")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Immutable
+@Entity(name = "potrosuvacka_po_mesec_patiki")
+@IdClass(PotrosuvackaPoMesecPatikiViewComposityKey.class)
 public class PotrosuvackaPoMesecPatikiView {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "produkt_id", updatable = false, nullable = false)
     private Integer produktId;
-
+    @Id
+    @Column(name = "mesec", updatable = false, nullable = false)
     private Integer mesec;
-    private Double potroshuvacka;
 
+    @Id
+    @Column(name = "godina", updatable = false, nullable = false)
+    private Integer godina;
+    private Double potroshuvacka;
 
 
 }

@@ -10,6 +10,8 @@ public interface ProductRepository extends JpaRepository<Produkt,Integer> {
 
     Produkt findByProduktId(Integer id);
 
+    Produkt findByModel(String model);
+
     @Query(value = "select * from produkt",nativeQuery = true)
     List<Produkt> find();
 

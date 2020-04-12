@@ -15,6 +15,9 @@ public interface KosnicaProduktMagacinRepository extends JpaRepository<KosnicaPr
 
     List<KosnicaProduktMagacin> findAllByKosnica_KosnicaId(Integer kosnicaId);
 
+    List<KosnicaProduktMagacin> findAllByKosnica_KosnicaIdAndKorisnikId(Integer kosnicaId,Integer korisnikId);
+
+
     Integer deleteByKosnica_KosnicaIdAndMagacin_MagacinIdAndProdukt_ProduktId(Integer kId,Integer mId,Integer pId);
 
 
